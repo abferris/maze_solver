@@ -1,0 +1,8 @@
+[project]
+name = "maze_solver"
+version = "0.1.0"
+description = "A python implementation, based off the boot.dev course, and customized"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+]
