@@ -52,7 +52,7 @@ class Crawler:
         move_line = Line(Point(x1, y1), Point(x2, y2), color=color, width=2)
         self.win.draw_line(move_line)
 
-    def move(self, direction):
+    def move(self, direction,undo=False):
         next_cell = None
         if direction == "left": next_cell = self.current_cell.left_cell
         elif direction == "right": next_cell = self.current_cell.right_cell
@@ -62,20 +62,20 @@ class Crawler:
         if not next_cell:
             return False
 
-        self.draw_move(self.current_cell, next_cell, undo=False)
+        self.draw_move(self.current_cell, next_cell, undo=undo)
         self.current_cell = next_cell
         self.last_direction = direction
         self.draw()
-        self.win.get_canvas().update()  # redraw immediately
-        time.sleep(0.3)  # small delay to see movement
+        self.win.get_canvas().update()
+        time.sleep(0.3)
         if self.at_exit():
-            self.__exit_maze(direction)
+            self._exit_maze(direction)
 
     def at_exit(self):
         return self.current_cell.is_end if self.current_cell else False
     
-    def __exit_maze(self, _):
-        # detect open side with no neighbor
+    def _exit_maze(self, _):
+
         direction = None
         if not self.current_cell.top_wall.exists and self.current_cell.top_cell is None:
             direction = "up"
@@ -106,7 +106,7 @@ class Crawler:
                 if self.icon:
                     self.win.get_canvas().delete(self.icon)
 
-                self.icon = self.__draw_at(x, y, direction)  # helper that draws triangle at coords
+                self.icon = self.__draw_at(x, y, direction)
                 self.win.get_canvas().update()
                 time.sleep(0.05)
 

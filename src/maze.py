@@ -172,6 +172,9 @@ class Maze():
         for row_walls in self.horizontal_walls:
             for wall in row_walls:
                 wall.draw()
+        for row_cells in self.__cells:
+            for cell in row_cells:
+                cell.draw()
 
         if self.entrance: self.mark_entrance(*self.entrance)
         if self.exit: self.mark_exit(*self.exit)
@@ -199,6 +202,7 @@ class Maze():
         return directions
     
     def set_all_neighbors(self):
+        print('setting neighbors')
         for r in range(self.__num_rows):
             for c in range(self.__num_cols):
                 cell = self.__cells[r][c]
@@ -222,3 +226,18 @@ class Maze():
                 if cell.bottom_wall is None or not cell.bottom_wall.exists:
                     if r < self.__num_rows - 1:
                         cell.bottom_cell = self.__cells[r+1][c]
+    def carve_path(self, path:list[tuple[int,int]]):
+        for i in range(len(path) - 1):
+            r1, c1 = path[i]
+            r2, c2 = path[i + 1]
+
+            if r1 == r2 and c1 + 1 == c2:
+                self.vertical_walls[r1][c1 + 1].toggle()
+            elif r1 == r2 and c1 - 1 == c2:
+                self.vertical_walls[r1][c2 + 1].toggle()
+            elif c1 == c2 and r1 + 1 == r2:
+                self.horizontal_walls[r1 + 1][c1].toggle()
+            elif c1 == c2 and r1 - 1 == r2:
+                self.horizontal_walls[r2 + 1][c1].toggle()
+        self.set_all_neighbors()
+        self.redraw()

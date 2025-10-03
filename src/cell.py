@@ -15,6 +15,7 @@ class Cell():
         self.top_cell: "Cell" = None
         self.bottom_cell: "Cell" = None
 
+
         self.is_start:bool = False
         self.is_end:bool = False
         self.exit_direction:int = -1
@@ -25,6 +26,12 @@ class Cell():
         self.__y1 = y1
         self.__y2 = y2
         self.__win = window
+
+    @property
+    def fill(self):
+        if self.left_wall is None or not self.left_wall.exists or self.right_wall is None or not self.right_wall.exists or self.top_wall is None or not self.top_wall.exists or self.bottom_wall is None or not self.bottom_wall.exists:
+            return 'white'
+        return 'black'
 
     @property
     def center(self):
@@ -39,19 +46,24 @@ class Cell():
         y1 = self.__y1 
         y2 = self.__y2
 
-        color = "black" if self.has_left_wall else "white"
+        canvas = self.__win.get_canvas()
+        canvas.create_rectangle(x1, y1, x2, y2, fill=self.fill, outline='')
+        print(self.fill)
+
+
+        color = "black" if self.left_wall and self.left_wall.exists else "white"
         left_line = Line(Point(x1,y1), Point(x1,y2),color)
         self.__win.draw_line(left_line)
         
-        color = "black" if self.has_top_wall else "white"
+        color = "black" if self.top_wall and self.top_wall.exists else "white"
         left_line = Line(Point(x1,y1), Point(x2,y1),color)
         self.__win.draw_line(left_line)
         
-        color = "black" if self.has_right_wall else "white"
+        color = "black" if self.right_wall and self.right_wall.exists else "white"
         left_line = Line(Point(x2,y1), Point(x2,y2),color)
         self.__win.draw_line(left_line)
         
-        color = "black" if self.has_bottom_wall else "white"
+        color = "black" if self.bottom_wall and self.bottom_wall.exists else "white"
         left_line = Line(Point(x1,y2), Point(x2,y2),color)
         self.__win.draw_line(left_line)
 
@@ -77,7 +89,7 @@ class Cell():
         self.__win._Window__canvas.create_rectangle(
             self.__x1 + padding, self.__y1 + padding,
             self.__x2 - padding, self.__y2 - padding,
-            fill="white", outline=""
+            fill=self.fill, outline=""
         )
 
     def set_neighbors(self):
@@ -100,3 +112,24 @@ class Cell():
                 # bottom neighbor
                 if r < self.__num_rows - 1 and not cell.bottom_wall.exists:
                     cell.bottom_cell = self.__cells[c][r + 1]
+
+    def get_available_directions(self):
+        directions = []
+        if self.left_wall is None or not self.left_wall.exists:
+            print(self.left_cell)
+            if self.left_cell:
+               directions.append("left")
+        print(self.right_wall is None or not self.right_wall.exists)
+        if self.right_wall is None or not self.right_wall.exists:
+            print(self.right_cell)
+            if self.right_cell:
+               directions.append("right")
+        if self.top_wall is None or not self.top_wall.exists:
+            if self.top_cell:
+               directions.append("up")
+        if self.bottom_wall is None or not self.bottom_wall.exists:
+            if self.bottom_cell:
+               directions.append("down")
+
+
+        return directions
