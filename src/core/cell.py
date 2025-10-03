@@ -1,7 +1,7 @@
-from src.window import Window
-from src.line import Line
-from src.point import Point
-from src.wall import Wall
+from src.ui.window import Window
+from src.core.line import Line
+from src.core.point import Point
+from src.core.wall import Wall
 
 class Cell():
     def __init__(self, x1=-1, x2=-1, y1=-1, y2=-1, window:Window=None):
@@ -28,17 +28,17 @@ class Cell():
         self.__win = window
 
     @property
-    def fill(self):
+    def fill(self) -> str:
         if self.left_wall is None or not self.left_wall.exists or self.right_wall is None or not self.right_wall.exists or self.top_wall is None or not self.top_wall.exists or self.bottom_wall is None or not self.bottom_wall.exists:
             return 'white'
         return 'black'
 
     @property
-    def center(self):
+    def center(self) -> Point:
         return Point((self.__x1 + self.__x2)//2, (self.__y1 + self.__y2)//2)
 
 
-    def draw(self):
+    def draw(self) -> None:
         if self.__win is None:
             return
         x1 = self.__x1 
@@ -68,7 +68,7 @@ class Cell():
         self.__win.draw_line(left_line)
 
 
-    def draw_move(self, to_cell:"Cell", undo=False):
+    def draw_move(self, to_cell:"Cell", undo:bool=False) -> None:
         if self.__win is None:
             return
         x_center = (self.__x2 + self.__x1)//2
@@ -82,7 +82,7 @@ class Cell():
         move_line = Line(Point(x_center, y_center), Point(x_center2, y_center2), color=color, width=2)
         self.__win.draw_line(move_line)
 
-    def clear(self):
+    def clear(self) -> None:
         if self.__win is None:
             return
         padding = 2
@@ -92,7 +92,7 @@ class Cell():
             fill=self.fill, outline=""
         )
 
-    def set_neighbors(self):
+    def set_neighbors(self) -> None:
         for r in range(self.__num_rows):
             for c in range(self.__num_cols):
                 cell = self.__cells[c][r]
@@ -113,7 +113,7 @@ class Cell():
                 if r < self.__num_rows - 1 and not cell.bottom_wall.exists:
                     cell.bottom_cell = self.__cells[c][r + 1]
 
-    def get_available_directions(self):
+    def get_available_directions(self) -> list:
         directions = []
         if self.left_wall is None or not self.left_wall.exists:
             print(self.left_cell)

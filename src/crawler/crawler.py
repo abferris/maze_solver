@@ -1,9 +1,11 @@
-from src.line import Line
-from src.point import Point
+from src.core.line import Line
+from src.core.point import Point
+from src.core.cell import Cell
+
 import time
 
 class Crawler:
-    def __init__(self, start_cell, win):
+    def __init__(self, start_cell:Cell, win):
         self.current_cell = start_cell
         self.win = win
         self.icon = None
@@ -33,7 +35,7 @@ class Crawler:
             self.win.get_canvas().delete(self.icon)
         self.icon = self.win.get_canvas().create_polygon(points, fill="red")
 
-    def get_directions(self):
+    def get_directions(self) -> list:
         directions = []
         if self.current_cell.left_cell: directions.append("left")
         if self.current_cell.right_cell: directions.append("right")
@@ -41,7 +43,7 @@ class Crawler:
         if self.current_cell.bottom_cell: directions.append("down")
         return directions
 
-    def draw_move(self, from_cell, to_cell, undo=False):
+    def draw_move(self, from_cell, to_cell, undo=False) -> None:
         if self.win is None:
             return
 
@@ -52,7 +54,7 @@ class Crawler:
         move_line = Line(Point(x1, y1), Point(x2, y2), color=color, width=2)
         self.win.draw_line(move_line)
 
-    def move(self, direction,undo=False):
+    def move(self, direction,undo=False) -> bool:
         next_cell = None
         if direction == "left": next_cell = self.current_cell.left_cell
         elif direction == "right": next_cell = self.current_cell.right_cell
@@ -70,11 +72,12 @@ class Crawler:
         time.sleep(0.3)
         if self.at_exit():
             self._exit_maze(direction)
+        return True
 
-    def at_exit(self):
+    def at_exit(self) -> bool:
         return self.current_cell.is_end if self.current_cell else False
     
-    def _exit_maze(self, _):
+    def _exit_maze(self, _) -> None:
 
         direction = None
         if not self.current_cell.top_wall.exists and self.current_cell.top_cell is None:
@@ -110,7 +113,7 @@ class Crawler:
                 self.win.get_canvas().update()
                 time.sleep(0.05)
 
-    def __draw_at(self, x, y, direction):
+    def __draw_at(self, x:int, y:int, direction:str) ->int:
         size = 15
         width = size * 2 // 3
 

@@ -1,6 +1,6 @@
 from tkinter import Canvas
-from src.point import Point
-from src.line import Line
+from src.core.point import Point
+from src.core.line import Line
 
 class Wall():
     def __init__(self, point1:Point, point2:Point, window=None):

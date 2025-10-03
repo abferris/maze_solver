@@ -1,11 +1,13 @@
 import time
 import random
+from typing import Dict
 
-from src.cell import Cell
-from src.line import Line
-from src.window import Window
-from src.point import Point
-from src.wall import  Wall
+
+from src.core.cell import Cell
+from src.core.line import Line
+from src.ui.window import Window
+from src.core.point import Point
+from src.core.wall import  Wall
 
 class Maze():
     def __init__(self, x1:int, y1:int, num_rows:int, num_cols:int,
@@ -34,10 +36,10 @@ class Maze():
         self.__create_walls()
         self.__create_cells()
 
-    def get_cell(self, i, j):
+    def get_cell(self, i, j) -> Cell:
         return self.__cells[i][j]
     
-    def __create_walls(self):
+    def __create_walls(self) -> None:
         for r in range(self.__num_rows):
             for c in range(self.__num_cols+1):
                 x = self.__x1 + c * self.__cell_size_x
@@ -52,7 +54,7 @@ class Maze():
                 y = self.__y1 + r * self.__cell_size_y
                 self.horizontal_walls[r][c] = Wall(Point(x1, y), Point(x2, y), self.__win)
 
-    def __create_cells(self):
+    def __create_cells(self) -> None:
         for r in range(self.__num_rows):
             for c in range(self.__num_cols):
                 x1 = self.__x1 + c * self.__cell_size_x
@@ -70,7 +72,7 @@ class Maze():
                 self.__cells[r][c] = cell
 
 
-    def __make_edge_opening(self, cell:Cell, side:int):
+    def __make_edge_opening(self, cell:Cell, side:int) -> Cell:
         if side == 0 and cell.left_wall and cell.left_wall.exists:
             cell.left_wall.toggle()
         elif side == 1 and cell.top_wall and cell.top_wall.exists:
@@ -81,7 +83,7 @@ class Maze():
             cell.bottom_wall.toggle()
         return cell
 
-    def mark_entrance(self, row:int, col:int, side:int=None):
+    def mark_entrance(self, row:int, col:int, side:int=None) -> None:
         self.entrance = (row, col, side)
         cell = self.get_cell(row, col)
         cell.is_start = True
@@ -122,7 +124,7 @@ class Maze():
             canvas = self.__win.get_canvas()
             canvas.create_text(x_center, y_center, text="E", fill="blue", font=("Arial",16,"bold"))
 
-    def mark_exit(self, row:int, col:int, side:int=None):
+    def mark_exit(self, row:int, col:int, side:int=None) -> None:
         cell = self.get_cell(row, col)
         self.exit = (row, col, side)
         cell.is_end = True
@@ -137,7 +139,6 @@ class Maze():
 
         if side in (0,1,2,3):
             self.__make_edge_opening(cell, side)
-
 
         if self.__win is None:
             return
@@ -165,7 +166,7 @@ class Maze():
         if start and end:
             self.__win.draw_line(Line(start, end, color="green", width=3, arrow="first"))
 
-    def redraw(self):
+    def redraw(self) -> None:
         for row_walls in self.vertical_walls:
             for wall in row_walls:
                 wall.draw()
@@ -181,7 +182,7 @@ class Maze():
 
         self.__win.redraw()
 
-    def get_available_directions(self, cell:Cell):
+    def get_available_directions(self, cell:Cell)-> Dict[str,Cell]:
         directions = {}
         if cell.left_wall is None or not cell.left_wall.exists:
             if col > 0:
@@ -201,32 +202,24 @@ class Maze():
 
         return directions
     
-    def set_all_neighbors(self):
-        print('setting neighbors')
+    def set_all_neighbors(self) -> None:
         for r in range(self.__num_rows):
             for c in range(self.__num_cols):
                 cell = self.__cells[r][c]
-
-                # left neighbor
                 if cell.left_wall is None or not cell.left_wall.exists:
                     if c > 0:
                         cell.left_cell = self.__cells[r][c-1]
-
-                # right neighbor
                 if cell.right_wall is None or not cell.right_wall.exists:
                     if c < self.__num_cols - 1:
                         cell.right_cell = self.__cells[r][c+1]
-
-                # top neighbor
                 if cell.top_wall is None or not cell.top_wall.exists:
                     if r > 0:
                         cell.top_cell = self.__cells[r-1][c]
-
-                # bottom neighbor
                 if cell.bottom_wall is None or not cell.bottom_wall.exists:
                     if r < self.__num_rows - 1:
                         cell.bottom_cell = self.__cells[r+1][c]
-    def carve_path(self, path:list[tuple[int,int]]):
+
+    def carve_path(self, path:list[tuple[int,int]]) -> None:
         for i in range(len(path) - 1):
             r1, c1 = path[i]
             r2, c2 = path[i + 1]
@@ -239,5 +232,6 @@ class Maze():
                 self.horizontal_walls[r1 + 1][c1].toggle()
             elif c1 == c2 and r1 - 1 == r2:
                 self.horizontal_walls[r2 + 1][c1].toggle()
+                
         self.set_all_neighbors()
         self.redraw()

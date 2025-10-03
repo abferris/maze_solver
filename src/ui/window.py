@@ -1,5 +1,5 @@
 from tkinter import Tk, BOTH, Canvas
-from src.line import Line
+from src.core.line import Line
 
 class Window ():
     def __init__(self, width:int, height:int, bg_color:str="white", title:str = "Maze Solver"):

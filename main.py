@@ -1,6 +1,6 @@
-from src.maze import Maze
-from src.window import Window
-from src.player_crawler import PlayerCrawler
+from src.maze.maze import Maze
+from src.ui.window import Window
+from src.crawler.player_crawler import PlayerCrawler
 
 
 

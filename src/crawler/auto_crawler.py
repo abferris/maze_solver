@@ -1,16 +1,17 @@
-from src.crawler import Crawler
+from src.crawler.crawler import Crawler
+from src.core.cell import Cell
 import time
 
 class AutomatedCrawler(Crawler):
-    def __init__(self, start_cell, win):
+    def __init__(self, start_cell:Cell, win):
         super().__init__(start_cell, win)
         self.visited = set() 
         self.path = []
 
-    def run(self):
+    def run(self) -> bool:
         return self._explore(self.current_cell)
 
-    def _explore(self, cell):
+    def _explore(self, cell:Cell) -> bool:
         self.visited.add(cell)
         self.path.append(cell)
 
@@ -30,12 +31,12 @@ class AutomatedCrawler(Crawler):
         self.path.pop()
         return False
 
-    def _get_neighbor(self, cell, direction):
+    def _get_neighbor(self, cell:Cell, direction:str) -> Cell:
         if direction == "left": return cell.left_cell
         if direction == "right": return cell.right_cell
         if direction == "up": return cell.top_cell
         if direction == "down": return cell.bottom_cell
         return None
 
-    def _opposite_direction(self, direction):
+    def _opposite_direction(self, direction:str) -> str:
         return {"left": "right", "right": "left", "up": "down", "down": "up"}[direction]

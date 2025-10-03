@@ -3,7 +3,7 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 import unittest
-from src.maze import Maze
+from src.maze.maze import Maze
 
 
 def carve_path(maze, path):
