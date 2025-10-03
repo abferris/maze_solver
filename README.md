@@ -6,9 +6,14 @@
 
 The point is to practice python programming.
 
+## Description
+
+I wanted to do this based off the description of a  tutorial I saw from boot.dev. I saw some of the basics, but didn't like how it was handling how things were constructed or generated. I also wanted to make this into something that was interactive rather than just 'make a map
+
 ## Rules of the game
 
-The point of this is to make a bot that can solve a maze
+The crawler should be spawned at an entrance of a maze. You can see the auto crawler crawl the maze, or use the arrow key to crawl the maze itself.
+
 
 
 ## Pre-Requirement Installs
@@ -34,88 +39,58 @@ Commands to run to get this to work:
 ## Folder Structure
 
 maze_solver/
+├── LICENSE
+├── README.md
 ├── main.py
 ├── pyproject.toml
-├── README.md
-├── .gitignore
-└── src/
-    ├── core
-    │   ├── constants.py   # game constants which can be changed to mod the game
-    highscore.py
-    ├── data/
-    │   └── highscores.json # this is ignored and will be created when you first run the game
-    ├── game/
-    │   ├── __init__.py
-    │   ├── background.py  
-    │   ├── circleshape.py
-    │   ├── enemies/
-    │   │   ├── __init__.py
-    │   │   ├── asteroid.py
-    │   │   └── asteroidfield.py
-    │   └── player/
-    │      ├── __init__.py
-    │      ├── player.py
-    │      └── shot.py
-    └── ui/
-        ├── __init__.py   
-        ├── menu_helpers.py
-        ├── menu_inputs.py
-        ├── menu.py
-        └── score.hud.py
+├── src
+│   ├── __init__.py
+│   ├── core
+│   │   ├── __init__.py
+│   │   ├── cell.py
+│   │   ├── line.py
+│   │   ├── point.py
+│   │   └── wall.py
+│   ├── crawler
+│   │   ├── __init__.py
+│   │   ├── auto_crawler.py
+│   │   ├── crawler.py
+│   │   └── player_crawler.py
+│   ├── maze
+│   │   ├── __init__.py
+│   │   └── maze.py
+│   └── ui
+│       ├── __init__.py
+│       └── window.py
+└── tests
+    ├── __init__.py
+    └── tests.py
        
 
 ## Future Improvements
-- add typing to everything
-- fix the 5 looking weird when printing
-- add the ability to use assets
-  - potential to add background asset
-  - replace triangle with a ship image
-  - be able to replace asteroid circles with assets
-    - potential for multiple asteroid assets
-  - change the shot
-    - make the shot color change
-    - add a small explosion for shots connecting
-- make an option for playing with lives
-  - potentially gain a life after a certain amount of points
-- make the singular highscore into a leaderboard
-- allow for initials to be inserted with a high score
-- powerups/debuffs
-  - shot mods
-    - multiple 
-    - shot speed up
-    - homing
-    - explosive shot
-  - ship mods
-    - shield
-    - accelleration
-- allow for fullscreen mode/screen size changes
-  - set up minimum screen size
-- secondary menu to modify constants in game
-  - if constants are modified, high score is reset
-  - warning that doing this will reset your high score
-  - option to reset high score by itself
-- setup safegaurd of high scores being tampered with manually
-- setting up so this game can run without terminal from an icon
-- adding enemies
 
-- not sure if i should be adding output typing to all of my fuctions. 
-  - Not sure where it is appropriate
-  - need feedback on where function inputs and outputs need typing
+- option to generate of maze Randomly
+- give a menu to select options
 
-## Screen Shots
-Fig. 1: Home Screen
+- option to run with auto_crawler
+- option to run with player crawler
+- option to create map
+- option to exit application
 
-<img width="1286" height="748" alt="Screenshot 2025-08-30 014732" src="https://github.com/user-attachments/assets/9a1435cb-703f-43a8-84ec-3727b0c57326" />
+- once inside run with
+  - option to played randomly generated map or savep map
+    - options for 4 different sizes
+- is changing randomized map difficulty a thing
+  - maybe changing the amount of active cells (cells with neighbors) in a maze
+  - minimum amount of turns to get to exit
+  - not sure how to achieve this
+- after completion 
+  - option to save map and name it before returning to main menu
+  - reroute to main menu
 
-Fig. 2: Gameplay
-
-<img width="1287" height="750" alt="Screenshot 2025-08-30 014656" src="https://github.com/user-attachments/assets/c96220e7-1ecf-4750-95b7-a2a0790befa8" />
-
-Fig. 3: Pause Screen
-
-<img width="1287" height="749" alt="Screenshot 2025-08-30 014748" src="https://github.com/user-attachments/assets/7fc6bbbe-8726-450a-b8ee-861f169f4105" />
-
-Fig. 4: Game Over menu
-
-<img width="1289" height="750" alt="Screenshot 2025-08-30 014708" src="https://github.com/user-attachments/assets/1060a2a0-a4c2-4722-8d43-e551b0608dc0" />
-
+- Ability to save maze
+  - use a map object that doesn't have an edit option
+- ability to create mazes
+  - ability to clone existing maze and edit based off that
+- ability to edit saved mazes
+  - creation/editor should not have filled in cells
