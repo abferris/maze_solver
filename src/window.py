@@ -2,10 +2,10 @@ from tkinter import Tk, BOTH, Canvas
 from src.line import Line
 
 class Window ():
-    def __init__(self, width:int, height:int, bg_color="white"):
+    def __init__(self, width:int, height:int, bg_color="white", title = "Maze Solver"):
         
         self.__root = Tk()
-        self.__root.title("Maze Solver")
+        self.__root.title = title
         self.__root.protocol("WM_DELETE_WINDOW", self.close)
         self.__canvas = Canvas(self.__root, bg=bg_color, height=height, width=width)
         self.__canvas.pack(fill="both", expand=1)
